@@ -1,0 +1,81 @@
+version: "3"
+services:
+  mongo-service:
+    image: mongo:latest
+    container_name: mongodb-con
+#    ports:
+#      - "27017"
+
+    network_mode: host
+    hostname: localhost
+
+  api-gateway-service:
+    image: api-gateway-image
+    build: api-gateway/.
+    restart: always
+    container_name: api-gateway-container
+    network_mode: host
+    hostname: localhost
+#    depends_on:
+#      - mongo-track-service
+#    ports:
+#      - '8020:8020'
+#    expose:
+#      -
+
+  config-server-service:
+    image: config-server-image
+    build: config-server/.
+    restart: always
+    container_name: config-server-container
+    network_mode: host
+    hostname: localhost
+#    ports:
+#      - '8040:8040'
+#    expose:
+#      -
+
+  eureka-server-service:
+    image: eureka-server-image
+    build: eureka-server/.
+    restart: always
+    container_name: eureka-server-container
+    network_mode: host
+    hostname: localhost
+#    depends_on:
+#      - mongo-track-service
+
+#    ports:
+#      - '8060:8060'
+#    expose:
+#      -
+
+  mongo-track-service:
+    image: track-service-image
+    build: mongo-track-service/.
+#    restart: always
+    container_name: track-service-container
+    network_mode: host
+    hostname: localhost
+    depends_on:
+      - mongo-service
+      - eureka-server-service
+      - config-server-service
+#    ports:
+#      - '8095:8095'
+#    expose:
+#      -
+
+  user-service:
+    image: user-service-image
+    build: user-service/.
+    restart: always
+    container_name: user-service-container
+    network_mode: host
+    hostname: localhost
+#    depends_on:
+#      -
+#    ports:
+#      - '8100:8100'
+#    expose:
+#      -
